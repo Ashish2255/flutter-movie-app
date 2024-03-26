@@ -15,10 +15,15 @@ Welcome to the Flutter Movie App, a mobile application developed using Flutter. 
 
 4. **Detailed Movie Description:**
    - Click on a movie to view its detailed description, including information such as cast, release date, and synopsis.
+     
+5. **Firebase Firestore Implementation:**
+   - Keeps a record of registered users, their email, password, and Watchlist.
+   - User can add a movie to his watchlist which is stored in the firestore database.  
 
 ## Screenshots
 
 Include screenshots or gifs showcasing the key features of your app.
+
 
 ## Getting Started
 
