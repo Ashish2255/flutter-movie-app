@@ -1,4 +1,5 @@
 //import 'package:demo_app/search.dart';
+import 'package:demo_app/profile/profile_page.dart';
 import 'package:demo_app/search_page.dart';
 import 'package:demo_app/toprated.dart';
 import 'package:demo_app/trending.dart';
@@ -7,9 +8,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io';
-
+import 'package:demo_app/models/user_models.dart';
+import 'package:demo_app/repository/user_repo.dart';
 import 'package:tmdb_api/tmdb_api.dart';
+import 'package:get/get.dart';
+import 'firebase_options.dart';
 void main() async{
+  //WidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
   Platform.isAndroid 
     ? await Firebase.initializeApp(
@@ -20,13 +25,15 @@ void main() async{
         projectId: "fir-app-1-fbc9f"),
     )
     :await Firebase.initializeApp();
-
+  
+  Get.put(UserRepository());
   runApp(MyApp());
+  
 }
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Authentication Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -185,8 +192,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
       await _auth.signInWithEmailAndPassword(
         email: _email,
         password: _password,
+        
+      );
+      List<int> _watchlist = [];
+      // Create UserModel instance
+      UserModel user = UserModel(
+        email: _email,
+        password: _password,
+        watchlist: _watchlist
       );
 
+      // Get instance of UserRepository
+      UserRepository userRepository = UserRepository.instance;
+
+      // Store user in Firestore
+      await userRepository.createUser(user);
       Navigator.pushReplacementNamed(context, '/home');
     } on FirebaseAuthException catch (e) {
       print('Error: ${e.message}');
@@ -274,7 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List trendingmovies = [];
   List topratedmovies = [];
   List upcomingmovies = [];
-
+  
   final String apiKey = 'f6af47f887c6773f90dcb685a8200e13';
   final String readaccesstoken = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmNmFmNDdmODg3YzY3NzNmOTBkY2I2ODVhODIwMGUxMyIsInN1YiI6IjY1ODMzMzJmZmJlMzZmNGFkYzdmMThhNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.orVnXoYOE3M4sEaFbIclisjDJ-eCDIf9UP_A3dOFHeI';
   
@@ -348,6 +368,12 @@ class _HomeScreenState extends State<HomeScreen> {
           setState(() {
             _currentIndex = index;
           });
+          if(index==1){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfilePage(email: _auth.currentUser!.email)),
+            );
+          }
           if (index == 2) {
             Navigator.push(
               context,
@@ -358,4 +384,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+String getCurrentUserEmail() {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  // Assuming _auth is your FirebaseAuth instance
+  return _auth.currentUser!.email!;
 }

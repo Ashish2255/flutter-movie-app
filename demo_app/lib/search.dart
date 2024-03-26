@@ -89,6 +89,7 @@ class _MovieSearchWidgetState extends State<MovieSearchWidget> {
                         overview: movie['overview'] ?? '',
                         popularity: (movie['popularity'] ?? 0.0).toDouble(),
                         movie_id: (movie['id']),
+                        
                       ),
                     ),
                   );
