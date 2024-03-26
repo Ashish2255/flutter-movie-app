@@ -22,7 +22,12 @@ Welcome to the Flutter Movie App, a mobile application developed using Flutter. 
 
 ## Screenshots
 
-Include screenshots or gifs showcasing the key features of your app.
+![Screenshot](https://github.com/Ashish2255/flutter-movie-app/blob/master/Screenshot%20(119).png)
+![Screenshot](https://github.com/Ashish2255/flutter-movie-app/blob/master/Screenshot%20(120).png)
+![Screenshot](https://github.com/Ashish2255/flutter-movie-app/blob/master/Screenshot%20(121).png)
+![Screenshot](https://github.com/Ashish2255/flutter-movie-app/blob/master/Screenshot%20(122).png)
+![Screenshot](https://github.com/Ashish2255/flutter-movie-app/blob/master/Screenshot%20(123).png)
+![Screenshot](https://github.com/Ashish2255/flutter-movie-app/blob/master/Screenshot%20(124).png)
 
 
 ## Getting Started
