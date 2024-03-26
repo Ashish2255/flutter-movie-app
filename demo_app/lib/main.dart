@@ -12,7 +12,7 @@ import 'package:demo_app/models/user_models.dart';
 import 'package:demo_app/repository/user_repo.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 import 'package:get/get.dart';
-import 'firebase_options.dart';
+
 void main() async{
   //WidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
@@ -368,13 +368,16 @@ class _HomeScreenState extends State<HomeScreen> {
           setState(() {
             _currentIndex = index;
           });
-          if(index==1){
+          if(index==0){
+            Navigator.pushReplacementNamed(context, '/home');
+          }
+          else if(index==1){
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ProfilePage(email: _auth.currentUser!.email)),
             );
           }
-          if (index == 2) {
+          else if (index == 2) {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => SearchPage()),

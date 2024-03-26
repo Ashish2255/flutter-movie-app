@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:demo_app/models/user_models.dart'; // Import your UserModel class
 import 'package:demo_app/repository/user_repo.dart'; // Import your UserRepository class
 import 'package:demo_app/watchlist.dart';
+import 'package:demo_app/search_page.dart';
+import 'package:demo_app/main.dart';
 class ProfilePage extends StatefulWidget {
   final String? email;
 
@@ -14,7 +16,8 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   late Future<UserModel> _userDetailsFuture;
   final UserRepository _userRepository = UserRepository.instance;
-
+  String userEmail = getCurrentUserEmail();
+  int _currentIndex = 1;
   @override
   void initState() {
     super.initState();
@@ -58,6 +61,45 @@ class _ProfilePageState extends State<ProfilePage> {
           }
         },
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
+          ),
+        ],
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          // Handle navigation to different tabs
+          setState(() {
+            _currentIndex = index;
+          });
+          if(index==0){
+            Navigator.pushReplacementNamed(context, '/home');
+          }
+          else if(index==1){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfilePage(email: userEmail)),
+            );
+          }
+          else if (index == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SearchPage()),
+            );
+          }
+        },
+      ),
     );
+    
   }
 }

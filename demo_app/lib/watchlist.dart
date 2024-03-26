@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tmdb_api/tmdb_api.dart';
+import 'package:demo_app/description_page.dart';
 
 class WatchlistMovies extends StatefulWidget {
   final List<int> watchlist;
@@ -38,27 +39,71 @@ class _WatchlistMoviesState extends State<WatchlistMovies> {
   }
 
   @override
+  
   Widget build(BuildContext context) {
-    return _isLoading
-        ? Center(child: CircularProgressIndicator())
-        : ListView.builder(
-            itemCount: widget.watchlist.length,
+  return Container(
+    padding: EdgeInsets.all(10),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Your Watchlist Movies'),
+        Container(
+          height: 270,
+          child: ListView.builder(
+            itemCount: _movieInfoMap.length,
+            scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
-              int id = widget.watchlist[index];
-              Map<dynamic, dynamic>? info = _movieInfoMap[id];
-              if (info != null) {
-                return ListTile(
-                  title: Text(info['title'] ?? 'Unknown Title'),
-                  subtitle: Text(info['overview'] ?? 'No Overview Available'),
-                  
-                  // Add more details as needed
+              final movieId = _movieInfoMap.keys.elementAt(index);
+              final movieDetails = _movieInfoMap[movieId];
+              if (movieDetails != null) {
+                return InkWell(
+                  onTap: () {
+                    // Navigate to movie description page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MovieDescriptionPage(
+                          title: movieDetails['title'] ?? '',
+                          posterPath: movieDetails['poster_path'] ?? '',
+                          releaseDate: movieDetails['release_date'] ?? '',
+                          overview: movieDetails['overview'] ?? '',
+                          popularity: (movieDetails['popularity'] ?? 0.0).toDouble(),
+                          movie_id: movieId,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: 140,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 210,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                'https://image.tmdb.org/t/p/w500${movieDetails['poster_path']}',
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          child: Text(movieDetails['title'] ?? 'Loading'),
+                        ),
+                      ],
+                    ),
+                  ),
                 );
               } else {
-                return ListTile(
-                  title: Text('Loading...'),
-                );
+                // Handle case when movie details are not available
+                return SizedBox.shrink(); // Empty widget
               }
             },
-          );
-  }
+          ),
+        )
+      ],
+    ),
+  );
+}
+
 }
